@@ -15,4 +15,31 @@
     <servlet-name>Jersey Web Application</servlet-name>
     <url-pattern>/webapi/*</url-pattern>
   </servlet-mapping>
+
+    <filter>
+    <filter-name>basicAuthenticationFilter</filter-name>
+    <filter-class>com.authentication.BasicAuthenticationFilter</filter-class>
+     <init-param>
+      <param-name>adminUsername</param-name>
+      <param-value>admin</param-value>
+    </init-param>
+     <init-param>
+      <param-name>adminPassword</param-name>
+      <param-value>admin</param-value>
+    </init-param>
+    <init-param>
+      <param-name>memberUsername</param-name>
+      <param-value>member</param-value>
+    </init-param>
+    <init-param>
+      <param-name>memberPassword</param-name>
+      <param-value>member</param-value>
+    </init-param>
+  </filter>
+  
+  <filter-mapping>
+    <filter-name>basicAuthenticationFilter</filter-name>
+    <url-pattern>/webapi/*</url-pattern>
+  </filter-mapping>
+  
 </web-app>

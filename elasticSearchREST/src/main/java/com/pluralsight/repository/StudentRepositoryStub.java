@@ -3,6 +3,8 @@ package com.pluralsight.repository;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
+
 import javax.inject.Inject;
 
 import org.elasticsearch.action.get.GetResponse;
@@ -22,13 +24,17 @@ import com.model.Student;
 public class StudentRepositoryStub implements StudentRepository {
 
 	private final ObjectMapper objectMapper = new ObjectMapper();
-
+	private Student student;
+	
+	@Inject
+	private Logger logger;
+	
 	@Inject
 	private Client client;
 
 	public List<Student> findAllStudents(String index, String type) {
 
-		Student student = null;
+
 		final int scrollSize = 1000;
 
 		SearchResponse response = null;
@@ -52,15 +58,11 @@ public class StudentRepositoryStub implements StudentRepository {
 					e.printStackTrace();
 				}
 				students.add(student);
-
 			}
-
 			i++;
-
 		}
-
+		logger.info("Getting all students");
 		return students;
-
 	}
 
 	public Student findStudent(String index, String type, String studentId) {
@@ -69,13 +71,13 @@ public class StudentRepositoryStub implements StudentRepository {
 
 		final String search = response.getSourceAsString();
 
-		Student student = null;
 		try {
 			student = objectMapper.readValue(search, Student.class);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
+		
+		logger.info("Getting student with ID " + studentId);
 		return student;
 
 	}
@@ -93,11 +95,13 @@ public class StudentRepositoryStub implements StudentRepository {
 		}
 
 		client.prepareIndex(index, type, id).setSource(json).get();
+		logger.info("Adding student " + json);
+		
 	}
 
 	public void deleteStudent(String index, String type, String studentId) {
 
 		client.prepareDelete(index, type, studentId).get();
-
+		logger.info("Deleting student with ID " + studentId);
 	}
 }

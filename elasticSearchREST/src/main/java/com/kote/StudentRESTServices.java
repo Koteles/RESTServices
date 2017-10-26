@@ -19,7 +19,7 @@ import com.pluralsight.repository.StudentRepository;
 
 @Path("elasticsearch")
 @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-public class StudentResource {
+public class StudentRESTServices {
 
 	@Inject
 	private StudentRepository studentRepository;
