@@ -15,6 +15,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import com.model.Student;
+import com.model.ZipPath;
 import com.pluralsight.repository.StudentRepository;
 
 @Path("elasticsearch")
@@ -57,6 +58,16 @@ public class StudentRESTServices {
 
 		studentRepository.addStudent(student, index, type);
 		return student;
+	}
+	
+	@POST
+	@Path("/getzipcontent")
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String getZipFileContent(ZipPath pathToZip) {
+		
+		return studentRepository.getZipFileContent(pathToZip);
+		
 	}
 
 	@DELETE
