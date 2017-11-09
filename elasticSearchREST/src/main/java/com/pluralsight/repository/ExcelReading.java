@@ -1,47 +1,34 @@
 package com.pluralsight.repository;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 
 public class ExcelReading {
 
-	public List<List<String>> xlsx(InputStream inputFile, String fileName) {
+	public List<List<String>> readContentOfExcel(InputStream inputFile) {
 
 		List<String> list = new ArrayList<String>();
 
 		List<List<String>> group = new ArrayList<List<String>>();
-		boolean isXLS = false;
-		int dotIndex = fileName.lastIndexOf(".");
-		if (fileName.substring(dotIndex + 1, fileName.length()).equals("xls")) {
-			isXLS = true;
-		}
 
 		try {
 
 			Sheet sheet = null;
-			Workbook wBook = null;
+			Workbook wBook = WorkbookFactory.create(inputFile);
+			
 			int numberOfSheets = 0;
-			if (isXLS) {
-				wBook = new HSSFWorkbook(inputFile);
-				numberOfSheets = wBook.getNumberOfSheets();
-
-			} else {
-				// Get the workbook object for XLSX file
-				wBook = new XSSFWorkbook(inputFile);
-				// Get first sheet from the workbook
-				numberOfSheets = wBook.getNumberOfSheets();
-
-				// sheet = wBook.getSheetAt(0);
-			}
+	
+			numberOfSheets = wBook.getNumberOfSheets();
 
 			for (int i = 0; i < numberOfSheets; i++) {
 				sheet = wBook.getSheetAt(i);
@@ -98,7 +85,10 @@ public class ExcelReading {
 				}
 
 			}
-		} catch (Exception ioe) {
+		}	catch(InvalidFormatException e) {
+			
+		}
+		catch (IOException ioe) {
 			ioe.printStackTrace();
 		}
 

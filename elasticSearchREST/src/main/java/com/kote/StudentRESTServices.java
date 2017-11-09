@@ -10,6 +10,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -49,6 +50,18 @@ public class StudentRESTServices {
 
 		return Response.ok().entity(student).build();
 	}
+	
+	@GET
+	@Path("{index}/{type}" + "/height")
+	public List<Student> getStudentByHeight(
+		@PathParam("index") String index, @PathParam("type") String type,
+		@QueryParam("from") double from,
+		@QueryParam("to") double to) {
+
+		System.out.println(from + " " + to);
+		return studentRepository.findStudentsByHeight(index, type, from, to);
+
+	}	
 
 	@POST
 	@Path("{index}/{type}")
@@ -66,7 +79,8 @@ public class StudentRESTServices {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public String getZipFileContent(ZipPath pathToZip) {
 		
-		return studentRepository.getZipFileContent(pathToZip);
+		String json = studentRepository.getZipFileContent(pathToZip);
+		return json;
 		
 	}
 

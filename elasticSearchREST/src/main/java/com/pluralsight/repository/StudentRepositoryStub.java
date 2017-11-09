@@ -102,7 +102,7 @@ public class StudentRepositoryStub implements StudentRepository {
 
 				InputStream stream = zipFile.getInputStream(zipEntry);
 				String fileName = zipEntry.getName();
-				myMap.put(fileName, reading.xlsx(stream, fileName));
+				myMap.put(fileName, reading.readContentOfExcel(stream));
 
 			}
 			zipFile.close();
@@ -117,6 +117,7 @@ public class StudentRepositoryStub implements StudentRepository {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	
 		return json;
 	}
 	
@@ -141,5 +142,38 @@ public class StudentRepositoryStub implements StudentRepository {
 
 		client.prepareDelete(index, type, studentId).get();
 		logger.info("Deleting student with ID " + studentId);
+	}
+
+	@Override
+	public List<Student> findStudentsByHeight(String index, String type, double from, double to) {
+		
+		final int scrollSize = 1000;
+		SearchResponse response = null;
+		int i = 0;
+		
+		List<Student> students = new ArrayList<Student>();
+		
+		final SearchRequestBuilder addSort = client.prepareSearch(index).setTypes(type)
+				.setQuery(QueryBuilders.matchAllQuery()).setPostFilter(QueryBuilders.rangeQuery("height").from(from).to(to))
+				.setSize(scrollSize).addSort("id", SortOrder.ASC);
+		
+		while (response == null || response.getHits().hits().length != 0) {
+
+			response = addSort.setFrom(i * scrollSize).get();
+
+			for (SearchHit hit : response.getHits()) {
+
+				try {
+					student = objectMapper.readValue(hit.getSourceAsString(), Student.class);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				students.add(student);
+			}
+			i++;
+		}
+		logger.info("Getting all students");
+		return students;
+	
 	}
 }
