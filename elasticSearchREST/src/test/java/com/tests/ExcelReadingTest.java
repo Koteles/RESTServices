@@ -16,7 +16,8 @@ import java.util.zip.ZipFile;
 
 import org.junit.Test;
 
-import com.pluralsight.repository.ExcelReading;
+import com.services.ExcelReading;
+
 
 public class ExcelReadingTest {
 

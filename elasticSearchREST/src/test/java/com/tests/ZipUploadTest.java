@@ -15,8 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.model.ZipPath;
-import com.pluralsight.repository.ExcelReading;
-import com.pluralsight.repository.StudentRepositoryStub;
+import com.pluralsight.repository.ZipFileRepositoryStub;
+import com.services.ExcelReading;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ZipUploadTest {
@@ -25,7 +25,7 @@ public class ZipUploadTest {
 	ExcelReading reading;
 	
 	@InjectMocks
-	private StudentRepositoryStub obj;	
+	private ZipFileRepositoryStub obj;	
 	
 	@Mock
 	ZipPath pathToZip;

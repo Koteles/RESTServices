@@ -1,4 +1,4 @@
-package com.pluralsight.repository;
+package com.services;
 
 import java.io.IOException;
 import java.io.InputStream;
