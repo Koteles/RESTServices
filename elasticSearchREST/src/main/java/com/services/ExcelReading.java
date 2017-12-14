@@ -24,7 +24,7 @@ public class ExcelReading {
 		try {
 
 			Sheet sheet = null;
-			Workbook wBook = WorkbookFactory.create(inputFile);
+			Workbook wBook = WorkbookFactory.create(inputFile); 
 			
 			int numberOfSheets = 0;
 	
